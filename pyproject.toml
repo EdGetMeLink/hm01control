@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "hmc"
+version = "0.1.0"
+description = "Mike Tronik's HM01 CNC Motion Controller"
+authors = ["Mike Deltgen <mike@deltgen.net>"]
+repository = "git@github.com:EdGetMeLink/hm01control.git"
+[tool.poetry.dependencies]
+python = "^3.5"
+pyserial = "^3.4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^4.6"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
