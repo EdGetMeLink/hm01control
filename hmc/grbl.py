@@ -16,11 +16,12 @@ class Grbl:
     grbl class for sending and receiving commands towards grbl
     """
 
-    def __init__(self, port="/dev/null", speed=115200):
+    def __init__(self, device="/dev/null", speed=115200, tcp_port=None):
         """
         grbl connection class connects to a grbl board over serial port
-        :param str port: the serial port to use default /dev/null
+        :param str device: the serial device to use default /dev/null
         :param int speed: the speed to set the serial port to
+        :param int tcp_port: the tcp port to connect to if device is tcp
         """
         self.port = port
         self.speed = speed
@@ -31,13 +32,17 @@ class Grbl:
         :param int retry: retries n times to connect to grbl
         :raises ConnectionError: if no connection to the grbl board occurs after retry count
         """
+        if device == "tcp":
+            conenctor = ""
+        else:
+            connector 
         for count in range(retry):
             self.serial = grbl_serial(self.port, self.speed)
             if self.serial:
                 break
         if not self.serial:
             raise ConnectionError(
-                "could not connect to grbl board after %s tries", retry
+                "could not connect to grbl board after %s tries", count
             )
 
         LOG.info("Connection to grbl board done")
