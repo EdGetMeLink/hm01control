@@ -1,7 +1,6 @@
 """
 grbl Class
 """
-import serial
 import logging
 
 LOG = logging.getLogger(__name__)
@@ -16,15 +15,18 @@ class Grbl:
     grbl class for sending and receiving commands towards grbl
     """
 
-    def __init__(self, device="/dev/null", speed=115200, tcp_port=None):
+    def __init__(self, connection, device=None, speed=115200, host=None, tcp_port=None):
         """
         grbl connection class connects to a grbl board over serial port
         :param str device: the serial device to use default /dev/null
         :param int speed: the speed to set the serial port to
         :param int tcp_port: the tcp port to connect to if device is tcp
         """
-        self.port = port
+        self.connection = connection
+        self.device = device
         self.speed = speed
+        self.host = host
+        self.tcp_port = tcp_port
 
     def connect(self, retry=2):
         """
@@ -33,7 +35,7 @@ class Grbl:
         :raises ConnectionError: if no connection to the grbl board occurs after retry count
         """
         if device == "tcp":
-            conenctor = ""
+            conenctor = tcpserial.Tcp2Serial()
         else:
             connector 
         for count in range(retry):
@@ -51,8 +53,8 @@ class Grbl:
         """"
         get config of the grbl board
         """
-        self.send("$$")
-        self.read()
+        self.connection.send("$$")
+        self.connection.read()
         ret = {
             0:10,
             1:25,
@@ -61,22 +63,3 @@ class Grbl:
         return ret
 
 
-def grbl_serial(port: str, speed: int) -> serial.Serial:
-    """
-    serial wrapper function
-    :param str port: serial port to use
-    :param int speed: the speed to configure the serial port
-    :return: serial Object or None
-    """
-    ser = None
-    try:
-        ser = serial.Serial(port, speed, timeout=1)
-        expected = "Grbl 1.1h ['$' for help]"
-        result = ser.read(50)
-        if not result == expected:
-            LOG.info("Serial communication problem.")
-            LOG.info("Expected %s got %s", expected, result)
-            ser = None
-    except serial.SerialException:
-        LOG.info("Serial connection to %s failed", port)
-    return ser
